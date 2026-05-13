@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>企业微信操作跳转</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<style>
+body { font-family:"微软雅黑",sans-serif; text-align:center; margin:0; padding:0; background-color:#f5f7fa; color:#333; }
+.container { max-width:480px; margin:0 auto; padding:20px; }
+h2 { color:#1a73e8; font-size:1.4rem; margin-bottom:25px; }
+.btn { display:block; width:80%; max-width:360px; margin:15px auto; padding:15px 0; font-size:1rem; background:#1a73e8; color:#fff; border-radius:8px; text-decoration:none; cursor:pointer; transition:background 0.3s; }
+.btn:hover { background:#155ab6; }
+#jumpBtn { background:#28a745; }
+.info { font-size:0.95rem; margin-top:10px; color:#555; }
+#countdown-text { font-size:1.1rem; margin-top:15px; font-weight:bold; color:#d9534f; }
+#progress-bar-container { width:80%; max-width:360px; height:18px; background-color:#e0e0e0; border-radius:10px; margin:15px auto; overflow:hidden; }
+#progress-bar { width:0%; height:100%; background-color:#1a73e8; border-radius:10px; transition:width 1s linear; background-image: linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, transparent 75%, transparent); background-size:40px 40px; animation:move 1s linear infinite; }
+@keyframes move { 0% { background-position:0 0; } 100% { background-position:40px 0; } }
+</style>
+</head>
+<body>
+<div class="container">
+<h2>请先访问企业微信官方页面</h2>
+<a class="btn" id="wxBtn" href="https://work.weixin.qq.com/ca/cawcde76751b5dfe8a" target="_blank">去官方页面</a>
+<p class="info">访问完官方页面后，将自动跳转到你的页面</p>
+<div id="countdown-text"></div>
+<div id="progress-bar-container">
+<div id="progress-bar"></div>
+</div>
+<a class="btn" id="jumpBtn">立即跳转到我的页面</a>
+</div>
+<script>
+const MY_PAGE="https://zj7.my";
+const COUNTDOWN_SECONDS=5;
+let timer;
+function startCountdown(){
+let secondsLeft=COUNTDOWN_SECONDS;
+const countdownEl=document.getElementById("countdown-text");
+const progressBar=document.getElementById("progress-bar");
+countdownEl.textContent=`页面即将跳转到你的页面，倒计时 ${secondsLeft} 秒`;
+progressBar.style.width="0%";
+timer=setInterval(()=>{
+secondsLeft--;
+progressBar.style.width=`${((COUNTDOWN_SECONDS-secondsLeft)/COUNTDOWN_SECONDS)*100}%`;
+if(secondsLeft>0){
+countdownEl.textContent=`页面即将跳转到你的页面，倒计时 ${secondsLeft} 秒`;
+}else{
+clearInterval(timer);
+progressBar.style.width="100%";
+countdownEl.textContent="正在跳转...";
+window.location.href=MY_PAGE;
+}
+},1000);
+}
+document.getElementById("wxBtn").addEventListener("click",function(){
+document.getElementById("wxBtn").style.display="none";
+startCountdown();
+});
+document.getElementById("jumpBtn").addEventListener("click",function(){
+clearInterval(timer);
+window.location.href=MY_PAGE;
+});
+</script>
+</body>
+</html>
